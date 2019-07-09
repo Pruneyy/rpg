@@ -3,12 +3,19 @@
 # Imports
 import classes
 import random
+import gen
 
 # Main
 def main():
-    m = classes.Healer()
-    m.command(m.COMMANDS)
-    print (m.attack(m.DICE))
+    intro()
+    g = gen.Generator()
+    g.gen_level()
+    g.gen_tiles_level()
+
+def intro():
+    print ('###############')
+    print ('')
+    print ('###############')
 
 # Running Main
 if __name__ == '__main__':
