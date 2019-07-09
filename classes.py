@@ -89,8 +89,16 @@ class Monster():
 
 class Equipment():
     def __init__(self, name, stats):
-        self.name = name
-        self.stats = stats
+        weapons = [
+            ('Mace', [0, 4, 1, -1]),
+            ('Sword', [0, 4, 0, 0]),
+            ('Dagger', [0, 2, 1, 2]),
+            ('Bow', [0, 3, 0, 1])
+        ]
+        w = random.choice(weapons)
+
+        self.name = w[0]
+        self.stats = w[1]
     
     def print_equipment_header(self):
         print('{} {:>8} {:>8} {:>8} {:>8}'.format('Name      ', 'HP', 'Atk', 'Def', 'Agi'))
