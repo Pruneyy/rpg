@@ -48,7 +48,7 @@ def main():
             for item in inventory:
                 item.print_equipment()
         else:
-            print ('Exiting....')
+            print ('Exiting......')
             break
 
 
