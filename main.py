@@ -5,7 +5,7 @@ def main():
 
     inventory = []
     inventory.append(classes.Equipment('Mace', [0, 3, 1, -1]))
-    stat = [50, 50, 50, 51]
+    stat = [50, 50, 50, 52]
     name = input ('\nEnter a name for your hero: ').capitalize()
     c = input ('\nPick a class --> [W]arrior or [A]ssassin: ').lower()
     if c == 'w':
