@@ -37,7 +37,7 @@ def main():
             elif cmd == 'r':
                 print ('\nYou escape!\n')
             else:
-                print ('Exiting......')
+                print ('Exiting................')
                 break
 
 
