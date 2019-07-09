@@ -1,113 +1,160 @@
+# Classes for simple rpg
+
+# Imports
 import random
-stat_description = ['HP ', 'Atk', 'Def', 'Agi']
-equipment = ['Weapon', 'Shield', 'Armour']
-w_increment = [3, 1, 2, 0]
-a_increment = [1, 2, 0, 3]
 
-# Hero class
-class Hero:
+# Dice rolling function
+def die(sides):
+    return random.randint(1, sides)
 
-    # Hero has a name, job, base stats, base level, base xp and amount of xp to level up
-    def __init__(self, name, job, stats, level, xp, up=10):
+# Character super class
+class Character:
+    
+    # All characters have a name, hit chance, dodge change, inventory and exp
+    def __init__ (self, name, hp, hit, dodge, inv, exp):
         self.name = name
-        self.job = job
-        self.stats = stats
-        self.level = level
-        self.xp = xp
-        self.up = up
+        self.hp = hp
+        self.hit = hit
+        self.dodge = dodge
+        self.inv = inv
+        self.exp = exp
 
-    # Print your stats
-    def print_details(self):
+    # Print functionality
+    def print_character(self):
+        print ('{} {:>8} {:>8} {:>8} {:>8}'.format(self.name, self.hp, self.hit, self.dodge, self.exp))
 
-        # Prints the name, level and xp
-        print('\n{} ({})\nLvl: {:>8}\nExp: {:>8}\n'.format(self.name, self.job, self.level, self.xp))
+    # All characters can fight
+    def attack(self, roll):
+        return die(roll)
+
+# Player class - a subset of Character
+class Player(Character):
+
+    # Players need a name
+    def __init__ (self, hp, exp):
+        super().__init__(input("What is your name? ").capitalize(), hp, 20, 10, {}, exp)
+
+    # Get command
+    def command (self, commands):
+        print ('Select an action:')
+        for item in commands:
+            print (item)
+        return input('')
+
+# Player class 1 --> Warrior
+class Warrior(Player):
+
+    # Constants for Warrior class
+    LEVEL = 1
+    LEVEL_2 = 10
+    MAX_HP = 10
+    DICE = 8
+    COMMANDS = ['[A]ttack']
+    PROF = 'Warrior'
+
+    # Initialise the Warrior
+    def __init__ (self):
+        super().__init__(10, 0)
+
+# Player class 2 --> Healer
+class Healer(Player):
+
+    # Constants for Healer class
+    LEVEL = 1
+    LEVEL_2 = 10
+    MAX_HP = 10
+    DICE = 6
+    MANA = 3
+    MAX_MANA = 3
+    COMMANDS = ['[A]ttack', '[H]eal', '[M]ana Restore']
+    PROF = 'Healer'
+
+    # Initialise the Healer
+    def __init__ (self):
+        super().__init__(8, 0)
+
+    # Heal ability
+    def heal(self):
+        return die(self.DICE)
+
+    # Restore mana ability
+    def mana_restore(self):
+        return die(min(self.MAX_MANA, self.DICE))
+
+# Player class 3 --> Mage
+class Mage(Player):
+
+    # Constants for Mage class
+    LEVEL = 1
+    LEVEL_2 = 10
+    MAX_HP = 10
+    DICE = 4
+    MANA = 3
+    MAX_MANA = 3
+    COMMANDS = ['[A]ttack', '[M]agic Missile', '[F]ireball', '[G]enerate Mana']
+    PROF = 'Mage'
+
+    # Initialise the Mage
+    def __init__ (self):
+        super().__init__(6, 0)
+
+    # Magic missile ability
+    def missile(self, mana):
+
+        damage = 0
+
+        # Deals a random amount of damage as many times as how much mana is used
+        for _ in range(mana):
+            damage = damage + die(self.DICE)
         
-        # Prints stats (hp, atk, def, agi)
-        for i, item in enumerate(self.stats):
-            print('{}: {:>8}'.format(stat_description[i], item))
-        print('\n')
+        return damage
 
-    # Update xp after getting a kill
-    def update_exp(self, xp):
-        print ('Congratulations you gained {} xp'.format(xp))
-        if (self.xp + xp) >= self.up:
-            self.up = self.up + 0.5*self.up
-            self.level = self.level + 1
-            self.update_stats()
-            print('Level = {} \nNext level = {} xp away'.format(self.level, int(self.up)))
-            self.xp = 0
-        else:
-            self.xp = self.xp + xp
+    # Fireball ability
+    def fireball(self, mana):
+
+        # Deals amount of mana used * single random dice roll
+        return mana * die(self.DICE)
+
+    # Regen mana ability
+    def generate_mana(self):
+        return die(min(self.MAX_MANA, self.DICE))
+
+# Monster class - a subset of Character
+class Monster(Character):
     
-    # Update stats after levelling up
-    def update_stats(self):
-        if self.job == 'Warrior':
-            for i in range(len(stat_description)):
-                self.stats[i] = self.stats[i] + w_increment[i]
-        elif self.job == 'Assassin':
-            for i in range(len(stat_description)):
-                self.stats[i] = self.stats[i] + a_increment[i]
-            
+    # Initialising Monsters
+    def __init__ (self, name, hp, exp=0):
+        super().__init__(name, hp, 20, 10, {}, exp)
 
-class Monster():
-    def __init__(self, name, level, stats):
-        monsters = [
-            ('Slime', 0),
-            ('Lizard', 1),
-            ('Snake', 2),
-            ('Boar', 3),
-            ('Brigand', 4),
-            ('Bear', 5),
-            ('Mammoth', 6),
-            ('Robot', 7),
-            ('Guardian', 8),
-            ('Dragon', 9)
-        ]
-
-        m = random.choice(monsters)
-        mon_stat = []
-        for y in range(4):
-            r_max = (m[1] * 10) + 9
-            mon_stat.append(random.randint(m[1]*10, r_max))
-            if y == 2:
-                mon_level = random.randint(m[1]*10, r_max)
-                if mon_level == 0:
-                    mon_level = 1
-        self.name = m[0]
-        self.level = mon_level
-        self.stats = mon_stat
-
-    def print_monster(self):
-        # Prints the name, level and xp
-        print('\n{} \nLvl: {:>8}\n'.format(self.name, self.level))
-
-        # Prints stats (hp, atk, def, agi)
-        for i, item in enumerate(self.stats):
-            print('{}: {:>8}'.format(stat_description[i], item))
-        print('\n')
-
-
-class Equipment():
-    def __init__(self, name, stats):
-        weapons = [
-            ('Mace', [0, 4, 1, -1]),
-            ('Sword', [0, 4, 0, 0]),
-            ('Dagger', [0, 2, 1, 2]),
-            ('Bow', [0, 3, 0, 1])
-        ]
-        w = random.choice(weapons)
-
-        self.name = w[0]
-        self.stats = w[1]
+# Monster Class 1 --> Goblin
+class Goblin(Monster):
     
-    def print_equipment_header(self):
-        print('{} {:>8} {:>8} {:>8} {:>8}'.format('Name      ', 'HP', 'Atk', 'Def', 'Agi'))
-    
-    def print_equipment(self):
-        print('{}'.format(self.name), end='')
-        for _ in range((10-len(self.name))):
-            print(' ', end='')
+    # Constants for Goblin class
+    MAX_HP = 10
+    DICE = 4
 
-        for item in self.stats:
-            print (' {:>8}'.format(item), end='')
-        print('\n')
+    # Initialise the Goblin
+    def __init__ (self):
+        super().__init__('Goblin',10, 0)
+
+# Monster Class 2 --> Orc
+class Orc(Monster):
+    
+    # Constants for Orc class
+    MAX_HP = 20
+    DICE = 6
+
+    # Initialise the Orc
+    def __init__ (self):
+        super().__init__('Orc',20, 0)
+
+# Monster Class 3 --> Ogre
+class Ogre(Monster):
+    
+    # Constants for Ogre class
+    MAX_HP = 30
+    DICE = 8
+
+    # Initialise the Ogre
+    def __init__ (self):
+        super().__init__('Ogre',30, 0)
