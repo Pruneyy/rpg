@@ -7,15 +7,10 @@ import gen
 
 # Main
 def main():
-    intro()
-    g = gen.Generator()
-    g.gen_level()
-    g.gen_tiles_level()
-
-def intro():
-    print ('###############')
-    print ('')
-    print ('###############')
+    # Generate and Print map
+    # g = gen.Generator()
+    # g.gen_level()
+    # g.gen_tiles_level()
 
 # Running Main
 if __name__ == '__main__':
