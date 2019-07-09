@@ -11,6 +11,7 @@ def main():
     # g = gen.Generator()
     # g.gen_level()
     # g.gen_tiles_level()
+    pass
 
 # Running Main
 if __name__ == '__main__':
