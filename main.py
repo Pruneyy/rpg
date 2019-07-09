@@ -4,7 +4,8 @@ import random
 def main():
 
     inventory = []
-    inventory.append(classes.Equipment('Mace', [0, 3, 1, -1]))
+    weapon = classes.Equipment('weaponName', 0)
+    inventory.append(weapon)
     stat = [50, 50, 50, 52]
     name = input ('\nEnter a name for your hero: ').capitalize()
     c = input ('\nPick a class --> [W]arrior or [A]ssassin: ').lower()
@@ -23,7 +24,7 @@ def main():
         what_do = input('Do you wish to [L]ook around, view [S]tats, view [I]nventory? ').lower()
 
         if what_do == 'l':
-            mon = monster_maker()
+            mon = classes.Monster("monsterName", 1, 1)
 
             print ('\nYou come across a {}\n'.format(mon.name))
             mon.print_monster()
@@ -37,9 +38,8 @@ def main():
             elif cmd == 'r':
                 print ('\nYou escape!\n')
             else:
-                print ('Exiting................')
+                print ('Exiting......')
                 break
-
 
         elif what_do == 's':
             hero.print_details()
@@ -50,34 +50,6 @@ def main():
         else:
             print ('Exiting......')
             break
-
-
-
-def monster_maker():
-    monsters = [
-        ('Slime', 0), 
-        ('Lizard', 1), 
-        ('Snake', 2), 
-        ('Boar', 3), 
-        ('Brigand', 4), 
-        ('Bear', 5), 
-        ('Mammoth', 6), 
-        ('Robot', 7),
-        ('Guardian', 8), 
-        ('Dragon', 9)
-    ]
-
-    m = random.choice(monsters)
-    mon_stat = []
-    for y in range(4):
-        r_max = (m[1] * 10) + 9
-        mon_stat.append(random.randint(m[1]*10, r_max))
-        if y == 2:
-            mon_level = random.randint(m[1]*10, r_max)
-            if mon_level == 0:
-                mon_level = 1
-    mon = classes.Monster(m[0], mon_level, mon_stat)
-    return mon
 
 def attack_process(hero, monster):
 

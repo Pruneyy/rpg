@@ -1,4 +1,4 @@
-
+import random
 stat_description = ['HP ', 'Atk', 'Def', 'Agi']
 equipment = ['Weapon', 'Shield', 'Armour']
 w_increment = [3, 1, 2, 0]
@@ -51,14 +51,36 @@ class Hero:
 
 class Monster():
     def __init__(self, name, level, stats):
-        self.name = name
-        self.level = level
-        self.stats = stats
-    
+        monsters = [
+            ('Slime', 0),
+            ('Lizard', 1),
+            ('Snake', 2),
+            ('Boar', 3),
+            ('Brigand', 4),
+            ('Bear', 5),
+            ('Mammoth', 6),
+            ('Robot', 7),
+            ('Guardian', 8),
+            ('Dragon', 9)
+        ]
+
+        m = random.choice(monsters)
+        mon_stat = []
+        for y in range(4):
+            r_max = (m[1] * 10) + 9
+            mon_stat.append(random.randint(m[1]*10, r_max))
+            if y == 2:
+                mon_level = random.randint(m[1]*10, r_max)
+                if mon_level == 0:
+                    mon_level = 1
+        self.name = m[0]
+        self.level = mon_level
+        self.stats = mon_stat
+
     def print_monster(self):
         # Prints the name, level and xp
         print('\n{} \nLvl: {:>8}\n'.format(self.name, self.level))
-        
+
         # Prints stats (hp, atk, def, agi)
         for i, item in enumerate(self.stats):
             print('{}: {:>8}'.format(stat_description[i], item))
@@ -67,8 +89,16 @@ class Monster():
 
 class Equipment():
     def __init__(self, name, stats):
-        self.name = name
-        self.stats = stats
+        weapons = [
+            ('Mace', [0, 4, 1, -1]),
+            ('Sword', [0, 4, 0, 0]),
+            ('Dagger', [0, 2, 1, 2]),
+            ('Bow', [0, 3, 0, 1])
+        ]
+        w = random.choice(weapons)
+
+        self.name = w[0]
+        self.stats = w[1]
     
     def print_equipment_header(self):
         print('{} {:>8} {:>8} {:>8} {:>8}'.format('Name      ', 'HP', 'Atk', 'Def', 'Agi'))
